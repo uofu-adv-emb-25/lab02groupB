@@ -16,15 +16,25 @@
 int count = 0;
 bool on = false;
 
+// Main above priority in task list
 #define MAIN_TASK_PRIORITY      ( tskIDLE_PRIORITY + 1UL )
 #define BLINK_TASK_PRIORITY     ( tskIDLE_PRIORITY + 2UL )
+
+// Set stack to 512 bytes
 #define MAIN_TASK_STACK_SIZE configMINIMAL_STACK_SIZE
 #define BLINK_TASK_STACK_SIZE configMINIMAL_STACK_SIZE
 
+// __unused to suppress warnings
 void blink_task(__unused void *params) {
+    // If true, has asserted properly
     hard_assert(cyw43_arch_init() == PICO_OK);
+    
     while (true) {
+        // Turn on the LED
         cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, on);
+
+        // Use count to toggle it every 12 ticks, delay by 500 ms
+        // Expected delay = 6 seconds
         if (count++ % 11) on = !on;
         vTaskDelay(500);
     }
@@ -34,9 +44,16 @@ void main_task(__unused void *params) {
     xTaskCreate(blink_task, "BlinkThread",
                 BLINK_TASK_STACK_SIZE, NULL, BLINK_TASK_PRIORITY, NULL);
     char c;
+    
+    // While user input is parseable
     while(c = getchar()) {
+        // If c is uppercase, make it lowercase
         if (c <= 'z' && c >= 'a') putchar(c - 32);
+
+        // If c is lowercase, "    "  uppercase
         else if (c >= 'A' && c <= 'Z') putchar(c + 32);
+
+        // If it's not a letter, return same input
         else putchar(c);
     }
 }
