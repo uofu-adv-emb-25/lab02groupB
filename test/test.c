@@ -24,9 +24,11 @@ void test_multiplication(void)
 
 int main (void)
 {
+    stdio_init_all();
+    sleep_ms(5000); // Give time for TTY to attach.
+    
     while(1) {
-        stdio_init_all();
-        sleep_ms(5000); // Give time for TTY to attach.
+        
         printf("Start tests\n");
         UNITY_BEGIN();
         RUN_TEST(test_variable_assignment);

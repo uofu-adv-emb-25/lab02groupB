@@ -49,6 +49,6 @@ int main( void )
     TaskHandle_t task;
     xTaskCreate(main_task, "MainThread",
                 MAIN_TASK_STACK_SIZE, NULL, MAIN_TASK_PRIORITY, &task);
-    vTaskStartScheduler();
+    //vTaskStartScheduler();
     return 0;
 }
