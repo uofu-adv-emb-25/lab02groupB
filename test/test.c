@@ -4,6 +4,8 @@
 #include <unity.h>
 #include "unity_config.h"
 
+#include "testFunctions.h"
+
 void setUp(void) {}
 
 void tearDown(void) {}
@@ -25,19 +27,15 @@ void test_multiplication(void)
 int main (void)
 {
     stdio_init_all();
-    sleep_ms(5000); // Give time for TTY to attach.
-    
+    hard_assert(cyw43_arch_init() == PICO_OK);
     while(1) {
-        
-        printf("Start tests\n");
-        UNITY_BEGIN();
-        RUN_TEST(test_variable_assignment);
-        RUN_TEST(test_multiplication);
-        sleep_ms(5000);
-
-        // Invokes some code that cleans up the test runner
-        UNITY_END();
+	    sleep_ms(5000); // Give time for TTY to attach.
+	    printf("Start tests\n");
+	    UNITY_BEGIN();
+	    RUN_TEST(test_multiplication);
+	    RUN_TEST(test_variable_assignment);
+	    UNITY_END();
     }
-    
+
     return 0;
 }

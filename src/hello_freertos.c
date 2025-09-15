@@ -47,14 +47,7 @@ void main_task(__unused void *params) {
     
     // While user input is parseable
     while(c = getchar()) {
-        // If c is uppercase, make it lowercase
-        if (c <= 'z' && c >= 'a') putchar(c - 32);
-
-        // If c is lowercase, "    "  uppercase
-        else if (c >= 'A' && c <= 'Z') putchar(c + 32);
-
-        // If it's not a letter, return same input
-        else putchar(c);
+        putchar(switch_char(c));
     }
 }
 
