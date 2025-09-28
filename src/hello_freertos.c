@@ -16,15 +16,25 @@
 int count = 0;
 bool on = false;
 
+// Main above priority in task list
 #define MAIN_TASK_PRIORITY      ( tskIDLE_PRIORITY + 1UL )
 #define BLINK_TASK_PRIORITY     ( tskIDLE_PRIORITY + 2UL )
+
+// Set stack to 512 bytes
 #define MAIN_TASK_STACK_SIZE configMINIMAL_STACK_SIZE
 #define BLINK_TASK_STACK_SIZE configMINIMAL_STACK_SIZE
 
+// __unused to suppress warnings
 void blink_task(__unused void *params) {
+    // If true, has asserted properly
     hard_assert(cyw43_arch_init() == PICO_OK);
+    
     while (true) {
+        // Turn on the LED
         cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, on);
+
+        // Use count to toggle it every 12 ticks, delay by 500 ms
+        // Expected delay = 6 seconds
         if (count++ % 11) on = !on;
         vTaskDelay(500);
     }
@@ -34,10 +44,10 @@ void main_task(__unused void *params) {
     xTaskCreate(blink_task, "BlinkThread",
                 BLINK_TASK_STACK_SIZE, NULL, BLINK_TASK_PRIORITY, NULL);
     char c;
+    
+    // While user input is parseable
     while(c = getchar()) {
-        if (c <= 'z' && c >= 'a') putchar(c - 32);
-        else if (c >= 'A' && c <= 'Z') putchar(c + 32);
-        else putchar(c);
+        putchar(switch_char(c));
     }
 }
 
@@ -49,6 +59,6 @@ int main( void )
     TaskHandle_t task;
     xTaskCreate(main_task, "MainThread",
                 MAIN_TASK_STACK_SIZE, NULL, MAIN_TASK_PRIORITY, &task);
-    //vTaskStartScheduler();
+    vTaskStartScheduler();
     return 0;
 }
