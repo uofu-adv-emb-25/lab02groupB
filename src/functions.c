@@ -5,7 +5,7 @@
 
 #include <stdint.h>
 
-#include "testFunctions.h"
+#include "functions.h"
 
 char switch_char(char c)
 {
@@ -17,4 +17,11 @@ char switch_char(char c)
 
     // If it's not a letter, return same input
     else return c;
+}
+
+void blink_func(bool* on, int* count) {
+    // Use count to toggle it every 12 ticks, delay by 500 ms
+    // Expected delay = 6 seconds
+    cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, on);
+    if ((*count)++ % 11) on = !on;
 }

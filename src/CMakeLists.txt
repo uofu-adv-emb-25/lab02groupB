@@ -2,8 +2,8 @@
 add_executable(hello_freertos
     hello_freertos.c
 
-    testFunctions
-    testFunctions.c
+    functions
+    functions.c
     )
 
 pico_set_program_name(hello_freertos "test")

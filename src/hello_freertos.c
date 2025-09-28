@@ -31,11 +31,7 @@ void blink_task(__unused void *params) {
     
     while (true) {
         // Turn on the LED
-        cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, on);
-
-        // Use count to toggle it every 12 ticks, delay by 500 ms
-        // Expected delay = 6 seconds
-        if (count++ % 11) on = !on;
+        blink_func(&on, &count);
         vTaskDelay(500);
     }
 }
