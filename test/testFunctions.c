@@ -16,7 +16,6 @@ void test_blink(void)
     int count = 0;
     bool on = 0;
 
-
     for (int i = 0; i < 120; i++) {
         int pin = cyw43_arch_gpio_get(CYW43_WL_GPIO_LED_PIN);
         int currentCount = count;
@@ -24,16 +23,27 @@ void test_blink(void)
 
         blink_func(&on, &count);
 
+        //printf("count: %d on: %d notOn: %d pin: %d \n", count, on, notOn, pin);
         TEST_ASSERT_EQUAL_MESSAGE(currentCount + 1, count, "Count did not increment by one");
 
+        printf("count: %d on: %d notOn: %d pin: %d \n", count, on, notOn, pin);
+        
+        if (i > 1) {
+            if ((!(count % 11) || (count % 11 == 1))) {
+                TEST_ASSERT_EQUAL_MESSAGE(pin, !on, "Pin did not alternate when it should have");
+            } else {
+                TEST_ASSERT_EQUAL_MESSAGE(pin, on, "Pin alternated when it should not have");
+            }
+        }
+
         if ((i+1) % 11) {
-            TEST_ASSERT_EQUAL_MESSAGE(notOn, !on, "'on' did not alternate when count was divisible by 11");
-            TEST_ASSERT_EQUAL_MESSAGE(!pin, cyw43_arch_gpio_get(CYW43_WL_GPIO_LED_PIN), 
-                                        "Pin value did not toggle when on toggled");
+            //printf("count: %d on: %d notOn: %d pin: %d \n", count, on, notOn, pin);
+            TEST_ASSERT_EQUAL_MESSAGE(notOn, !on, "'on' alternated when count was divisible by 11");
+
         } else {
-            TEST_ASSERT_EQUAL_MESSAGE(notOn, on, "'On' alternated when count was not divisible by 11");
-            TEST_ASSERT_EQUAL_MESSAGE(pin, cyw43_arch_gpio_get(CYW43_WL_GPIO_LED_PIN), 
-                                        "Pin value toggled when 'on' did not");
+            //printf("count: %d on: %d notOn: %d pin: %d \n", count, on, notOn, pin);
+            TEST_ASSERT_EQUAL_MESSAGE(notOn, on, "'On' did not alternate when count was not divisible by 11");
+            
         }
             
     }
