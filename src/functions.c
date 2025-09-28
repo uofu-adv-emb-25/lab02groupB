@@ -22,6 +22,6 @@ char switch_char(char c)
 void blink_func(bool* on, int* count) {
     // Use count to toggle it every 12 ticks, delay by 500 ms
     // Expected delay = 6 seconds
-    cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, on);
-    if ((*count)++ % 11) on = !on;
+    cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, (*on));
+    if (++(*count) % 11) (*on) = !(*on);
 }
